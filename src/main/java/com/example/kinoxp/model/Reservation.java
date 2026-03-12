@@ -42,5 +42,5 @@ public class Reservation {
 
     public void setShowingId(Long showingId){this.showingId=showingId;}
 
-    
+
 }
