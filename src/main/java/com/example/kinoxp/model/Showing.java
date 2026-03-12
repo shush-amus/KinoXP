@@ -16,8 +16,7 @@ public class Showing {
     private String movieTitle;
     private String theaterName;
 
-    public Showing() {
-    }
+    public Showing() {}
 
     public Showing(LocalDateTime showTime, double price, String movieTitle, String theaterName) {
         this.showTime = showTime;
@@ -26,40 +25,22 @@ public class Showing {
         this.theaterName = theaterName;
     }
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() {return id;}
 
-    public LocalDateTime getShowTime() {
-        return showTime;
-    }
+    public LocalDateTime getShowTime() {return showTime;}
 
-    public void setShowTime(LocalDateTime showTime) {
-        this.showTime = showTime;
-    }
+    public void setShowTime(LocalDateTime showTime) {this.showTime = showTime;}
 
-    public double getPrice() {
-        return price;
-    }
+    public double getPrice() {return price;}
 
-    public void setPrice(double price) {
-        this.price = price;
-    }
+    public void setPrice(double price) {this.price = price;}
 
-    public String getMovieTitle() {
-        return movieTitle;
-    }
+    public String getMovieTitle() {return movieTitle;}
 
-    public void setMovie(String movieTitle) {
-        this.movieTitle = movieTitle;
-    }
+    public void setMovieTitle(String movieTitle) {this.movieTitle = movieTitle;}
 
-    public String getTheaterName() {
-        return theaterName;
-    }
+    public String getTheaterName() {return theaterName;}
 
-    public void setTheater(String theaterName) {
-        this.theaterName = theaterName;
-    }
+    public void setTheaterName(String theaterName) {this.theaterName = theaterName;}
 
 }
