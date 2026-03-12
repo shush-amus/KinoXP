@@ -25,4 +25,9 @@ public class ShowingController {
     public Showing createShowing(@RequestBody Showing showing) {
         return showingRepository.save(showing);
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteShowing(@PathVariable Long id){
+        showingRepository.deleteById(id);
+    }
 }
