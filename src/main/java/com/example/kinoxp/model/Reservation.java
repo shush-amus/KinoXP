@@ -43,4 +43,5 @@ public class Reservation {
     public void setShowingId(Long showingId){this.showingId=showingId;}
 
 
+    public void setTotalPrice(double totalPrice) {this.totalPrice=totalPrice;}
 }
