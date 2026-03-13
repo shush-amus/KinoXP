@@ -1,14 +1,11 @@
 package com.example.kinoxp.controller;
 
 import com.example.kinoxp.model.Reservation;
-import com.example.kinoxp.model.Showing;
 import com.example.kinoxp.repository.ReservationRepository;
-import com.example.kinoxp.repository.ShowingRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -16,11 +13,9 @@ import java.util.Optional;
 public class ReservationController {
 
     private final ReservationRepository reservationRepository;
-    private final ShowingRepository showingRepository;
 
-    public ReservationController(ReservationRepository reservationRepository, ShowingRepository showingRepository) {
+    public ReservationController(ReservationRepository reservationRepository) {
         this.reservationRepository = reservationRepository;
-        this.showingRepository = showingRepository;
     }
 
     @GetMapping
@@ -30,21 +25,15 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
-
-        Optional<Showing> showingOptional = showingRepository.findById(reservation.getShowingId());
-
-        if (showingOptional.isEmpty()) {
-            return ResponseEntity.badRequest().body("Showing not found");
+        if (reservation.getCustomerName() == null || reservation.getCustomerName().isBlank()) {
+            return ResponseEntity.badRequest().body("Customer name is required");
         }
 
-        Showing showing = showingOptional.get();
-
-        double totalPrice = showing.getPrice() * reservation.getTicketCount();
-
-        reservation.setTotalPrice(totalPrice);
+        if (reservation.getTicketCount() < 1) {
+            return ResponseEntity.badRequest().body("Ticket count must be at least 1");
+        }
 
         Reservation savedReservation = reservationRepository.save(reservation);
-
         return ResponseEntity.ok(savedReservation);
     }
 }

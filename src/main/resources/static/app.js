@@ -4,9 +4,13 @@ const reservationForm = document.getElementById("reservationForm");
 const showingSelect = document.getElementById("showingId");
 const message = document.getElementById("message");
 
+let allShowings = [];
+
 async function loadShowings() {
     const response = await fetch("/api/showings");
     const showings = await response.json();
+
+    allShowings = showings;
 
     showingsDiv.innerHTML = "";
     showingSelect.innerHTML = "";
@@ -51,10 +55,23 @@ async function loadReservations() {
 reservationForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
+    const selectedShowingId = parseInt(document.getElementById("showingId").value);
+    const ticketCount = parseInt(document.getElementById("ticketCount").value);
+
+    const selectedShowing = allShowings.find(showing => showing.id === selectedShowingId);
+
+    if (!selectedShowing) {
+        message.textContent = "Could not find selected showing.";
+        return;
+    }
+
+    const totalPrice = selectedShowing.price * ticketCount;
+
     const reservation = {
         customerName: document.getElementById("customerName").value,
-        showingId: parseInt(document.getElementById("showingId").value),
-        ticketCount: parseInt(document.getElementById("ticketCount").value)
+        showingId: selectedShowingId,
+        ticketCount: ticketCount,
+        totalPrice: totalPrice
     };
 
     const response = await fetch("/api/reservations", {
@@ -71,7 +88,8 @@ reservationForm.addEventListener("submit", async (e) => {
         reservationForm.reset();
         loadReservations();
     } else {
-        message.textContent = "Could not create reservation.";
+        const errorText = await response.text();
+        message.textContent = "Could not create reservation: " + errorText;
     }
 });
 
