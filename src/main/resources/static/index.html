@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KinoXP</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<h1>KinoXP</h1>
+
+<section>
+    <h2>Available Showings</h2>
+    <div id="showings"></div>
+</section>
+
+<section>
+    <h2>Create Reservation</h2>
+    <form id="reservationForm">
+        <label for="customerName">Customer name:</label>
+        <input type="text" id="customerName" required>
+
+        <label for="showingId">Choose showing:</label>
+        <select id="showingId" required></select>
+
+        <label for="ticketCount">Number of tickets:</label>
+        <input type="number" id="ticketCount" min="1" required>
+
+        <button type="submit">Create reservation</button>
+    </form>
+    <p id="message"></p>
+</section>
+
+<section>
+    <h2>Reservations</h2>
+    <div id="reservations"></div>
+</section>
+
+<script src="app.js"></script>
+</body>
+</html>
