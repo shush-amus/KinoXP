@@ -2,6 +2,8 @@ const showingsDiv = document.getElementById("showings");
 const reservationsDiv = document.getElementById("reservations");
 const reservationForm = document.getElementById("reservationForm");
 const showingSelect = document.getElementById("showingId");
+const customerNameInput = document.getElementById("customerName");
+const ticketCountInput = document.getElementById("ticketCount");
 const message = document.getElementById("message");
 
 let allShowings = [];
@@ -55,9 +57,8 @@ async function loadReservations() {
 reservationForm.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const selectedShowingId = parseInt(document.getElementById("showingId").value);
-    const ticketCount = parseInt(document.getElementById("ticketCount").value);
-
+    const selectedShowingId = parseInt(showingSelect.value);
+    const ticketCount = parseInt(ticketCountInput.value);
     const selectedShowing = allShowings.find(showing => showing.id === selectedShowingId);
 
     if (!selectedShowing) {
@@ -65,13 +66,11 @@ reservationForm.addEventListener("submit", async (e) => {
         return;
     }
 
-    const totalPrice = selectedShowing.price * ticketCount;
-
     const reservation = {
-        customerName: document.getElementById("customerName").value,
+        customerName: customerNameInput.value,
         showingId: selectedShowingId,
         ticketCount: ticketCount,
-        totalPrice: totalPrice
+        totalPrice: selectedShowing.price * ticketCount
     };
 
     const response = await fetch("/api/reservations", {
