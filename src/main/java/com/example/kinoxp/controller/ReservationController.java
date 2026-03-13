@@ -6,7 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+// Handles creation and retrieval of reservations
 @RestController
 @RequestMapping("/api/reservations")
 @CrossOrigin
@@ -24,7 +24,7 @@ public class ReservationController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createReservation(@RequestBody Reservation reservation) {
+    public ResponseEntity<String> createReservation(@RequestBody Reservation reservation) {
         if (reservation.getCustomerName() == null || reservation.getCustomerName().isBlank()) {
             return ResponseEntity.badRequest().body("Customer name is required");
         }
@@ -33,7 +33,7 @@ public class ReservationController {
             return ResponseEntity.badRequest().body("Ticket count must be at least 1");
         }
 
-        Reservation savedReservation = reservationRepository.save(reservation);
-        return ResponseEntity.ok(savedReservation);
+        reservationRepository.save(reservation);
+        return ResponseEntity.ok("Reservation created successfully");
     }
 }
