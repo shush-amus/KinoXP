@@ -38,10 +38,10 @@ public class Reservation {
 
     public double getTotalPrice() {return totalPrice;}
 
+    public void setTotalPrice(double totalPrice) {this.totalPrice=totalPrice;}
+
     public Long getShowingId(){return showingId;}
 
     public void setShowingId(Long showingId){this.showingId=showingId;}
 
-
-    public void setTotalPrice(double totalPrice) {this.totalPrice=totalPrice;}
 }
