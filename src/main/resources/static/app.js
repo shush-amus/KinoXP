@@ -82,10 +82,9 @@ reservationForm.addEventListener("submit", async (e) => {
     });
 
     if (response.ok) {
-        const savedReservation = await response.json();
-        message.textContent = `Reservation created. Total price: ${savedReservation.totalPrice} DKK`;
         reservationForm.reset();
-        loadReservations();
+        await loadReservations();
+        message.textContent = `Reservation created successfully.`;
     } else {
         const errorText = await response.text();
         message.textContent = "Could not create reservation: " + errorText;
