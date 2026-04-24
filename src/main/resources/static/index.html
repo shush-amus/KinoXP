@@ -7,35 +7,58 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<h1>KinoXP Reservation System</h1>
-<p>Simple prototype for viewing showings and creating reservations.</p>
+<main class="layout">
+    <section class="card">
+        <h1>KinoXP</h1>
+        <p>Case 1 project with Spring Security, session login and a pricing microservice.</p>
+        <p><strong>Test users:</strong> test / test123, john / test123, admin / admin123</p>
+    </section>
 
-<section>
-    <h2>Available Showings</h2>
-    <div id="showings"></div>
-</section>
+    <section class="card">
+        <h2>Login</h2>
+        <p id="authStatus">You are not logged in.</p>
 
-<section>
-    <h2>Create Reservation</h2>
-    <form id="reservationForm">
-        <label for="customerName">Customer name:</label>
-        <input type="text" id="customerName" required>
+        <form id="loginForm" class="inline-form">
+            <label for="username">Username</label>
+            <input type="text" id="username" autocomplete="username" required>
 
-        <label for="showingId">Choose showing:</label>
-        <select id="showingId" required></select>
+            <label for="password">Password</label>
+            <input type="password" id="password" autocomplete="current-password" required>
 
-        <label for="ticketCount">Number of tickets:</label>
-        <input type="number" id="ticketCount" min="1" required>
+            <div class="button-row">
+                <button type="submit">Login</button>
+                <button type="button" id="logoutButton" class="secondary">Logout</button>
+            </div>
+        </form>
+        <p id="authMessage" class="message"></p>
+    </section>
 
-        <button type="submit">Create reservation</button>
-    </form>
-    <p id="message"></p>
-</section>
+    <section class="card">
+        <h2>Available Showings</h2>
+        <div id="showings" class="grid"></div>
+    </section>
 
-<section>
-    <h2>Reservations</h2>
-    <div id="reservations"></div>
-</section>
+    <section class="card protected" id="protectedArea">
+        <h2>Create Reservation</h2>
+        <p>Only authenticated users can create and see their own reservations.</p>
+
+        <form id="reservationForm" class="inline-form">
+            <label for="showingId">Choose showing</label>
+            <select id="showingId" required></select>
+
+            <label for="ticketCount">Number of tickets</label>
+            <input type="number" id="ticketCount" min="1" required>
+
+            <button type="submit">Create reservation</button>
+        </form>
+        <p id="message" class="message"></p>
+    </section>
+
+    <section class="card protected" id="reservationsSection">
+        <h2>My Reservations</h2>
+        <div id="reservations" class="grid"></div>
+    </section>
+</main>
 
 <script src="app.js"></script>
 </body>

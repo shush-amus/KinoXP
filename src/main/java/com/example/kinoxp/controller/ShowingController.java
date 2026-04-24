@@ -5,7 +5,6 @@ import com.example.kinoxp.repository.ShowingRepository;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-// REST controller for managing movie showings
 @RestController
 @RequestMapping("/api/showings")
 public class ShowingController {
@@ -27,7 +26,7 @@ public class ShowingController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteShowing(@PathVariable Long id){
+    public void deleteShowing(@PathVariable Long id) {
         showingRepository.deleteById(id);
     }
 }
