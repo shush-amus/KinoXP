@@ -1,39 +1,79 @@
 package com.example.kinoxp.controller;
 
+import com.example.kinoxp.dto.PricingServiceResponse;
+import com.example.kinoxp.dto.ReservationRequest;
 import com.example.kinoxp.model.Reservation;
+import com.example.kinoxp.model.Showing;
 import com.example.kinoxp.repository.ReservationRepository;
+import com.example.kinoxp.repository.ShowingRepository;
+import com.example.kinoxp.service.PricingServiceClient;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-// Handles creation and retrieval of reservations
+import java.util.Optional;
+
 @RestController
 @RequestMapping("/api/reservations")
-@CrossOrigin
 public class ReservationController {
 
     private final ReservationRepository reservationRepository;
+    private final ShowingRepository showingRepository;
+    private final PricingServiceClient pricingServiceClient;
 
-    public ReservationController(ReservationRepository reservationRepository) {
+    public ReservationController(
+            ReservationRepository reservationRepository,
+            ShowingRepository showingRepository,
+            PricingServiceClient pricingServiceClient
+    ) {
         this.reservationRepository = reservationRepository;
+        this.showingRepository = showingRepository;
+        this.pricingServiceClient = pricingServiceClient;
     }
 
     @GetMapping
-    public List<Reservation> getAllReservations() {
-        return reservationRepository.findAll();
+    public List<Reservation> getOwnReservations(Authentication authentication) {
+        return reservationRepository.findByUsernameOrderByIdDesc(authentication.getName());
     }
 
     @PostMapping
-    public ResponseEntity<String> createReservation(@RequestBody Reservation reservation) {
-        if (reservation.getCustomerName() == null || reservation.getCustomerName().isBlank()) {
-            return ResponseEntity.badRequest().body("Customer name is required");
+    public ResponseEntity<?> createReservation(@RequestBody ReservationRequest request, Authentication authentication) {
+        if (request.showingId() == null) {
+            return ResponseEntity.badRequest().body("A showing must be selected.");
         }
 
-        if (reservation.getTicketCount() < 1) {
-            return ResponseEntity.badRequest().body("Ticket count must be at least 1");
+        if (request.ticketCount() < 1) {
+            return ResponseEntity.badRequest().body("Ticket count must be at least 1.");
         }
 
-        reservationRepository.save(reservation);
-        return ResponseEntity.ok("Reservation created successfully");
+        Optional<Showing> showingOptional = showingRepository.findById(request.showingId());
+        if (showingOptional.isEmpty()) {
+            return ResponseEntity.badRequest().body("Showing does not exist.");
+        }
+
+        Showing showing = showingOptional.get();
+        PricingServiceResponse price = pricingServiceClient.calculatePrice(showing.getPrice(), request.ticketCount());
+
+        Reservation reservation = new Reservation(
+                authentication.getName(),
+                request.ticketCount(),
+                price.totalPrice(),
+                request.showingId(),
+                price.bookingFee()
+        );
+
+        Reservation savedReservation = reservationRepository.save(reservation);
+        return ResponseEntity.ok(savedReservation);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable Long id, Authentication authentication) {
+        return reservationRepository.findByIdAndUsername(id, authentication.getName())
+                .map(reservation -> {
+                    reservationRepository.delete(reservation);
+                    return ResponseEntity.noContent().build();
+                })
+                .orElseGet(() -> ResponseEntity.status(404).body("Reservation not found for current user."));
     }
 }

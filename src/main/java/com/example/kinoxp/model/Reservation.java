@@ -12,36 +12,64 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String customerName;
+    private String username;
     private int ticketCount;
     private double totalPrice;
     private Long showingId;
+    private Double bookingFee;
 
-    public Reservation(){}
+    public Reservation() {
+    }
 
-    public Reservation(String customerName, int ticketCount, double totalPrice, Long showingId){
-        this.customerName=customerName;
-        this.ticketCount=ticketCount;
-        this.totalPrice=totalPrice;
+    public Reservation(String username, int ticketCount, double totalPrice, Long showingId, double bookingFee) {
+        this.username = username;
+        this.ticketCount = ticketCount;
+        this.totalPrice = totalPrice;
+        this.showingId = showingId;
+        this.bookingFee = bookingFee;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public int getTicketCount() {
+        return ticketCount;
+    }
+
+    public void setTicketCount(int ticketCount) {
+        this.ticketCount = ticketCount;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public Long getShowingId() {
+        return showingId;
+    }
+
+    public void setShowingId(Long showingId) {
         this.showingId = showingId;
     }
 
-    public Long getId(){return id;}
+    public Double getBookingFee() {
+        return bookingFee == null ? 0.0 : bookingFee;
+    }
 
-    public String getCustomerName(){return customerName;}
-
-    public void setCustomerName(String customerName){this.customerName=customerName;}
-
-    public int getTicketCount(){return ticketCount;}
-
-    public void setTicketCount(int ticketCount){this.ticketCount=ticketCount;}
-
-    public double getTotalPrice() {return totalPrice;}
-
-    public void setTotalPrice(double totalPrice) {this.totalPrice=totalPrice;}
-
-    public Long getShowingId(){return showingId;}
-
-    public void setShowingId(Long showingId){this.showingId=showingId;}
-
+    public void setBookingFee(Double bookingFee) {
+        this.bookingFee = bookingFee;
+    }
 }
